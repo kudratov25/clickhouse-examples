@@ -23,5 +23,6 @@ Route::group(['prefix' => 'clickhouse'], function () {
     Route::get('/trips/update', [TripsController::class, 'update']);
     Route::get('/trips/get-update', [TripsController::class, 'getUpdateInfo']);
     Route::get('/trips/update2', [TripsController::class, 'update2']);
-
+    Route::get('/trips/materialized-view', [TripsController::class, 'makeView']);
+    Route::get('/trips/materialized-view/data', [TripsController::class, 'showMvTable']);
 });

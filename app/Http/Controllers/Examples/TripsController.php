@@ -316,4 +316,33 @@ class TripsController extends Controller
             return "error:" . $e;
         }
     }
+
+
+
+    // materilized view for the new continius updates
+    // it will makes a data when new data inserted to the parent table{trips,users,....}
+    public function makeView()
+    {
+        $sql = <<<SQL
+            CREATE MATERIALIZED VIEW mv_trips
+            ENGINE = ReplacingMergeTree
+            ORDER BY trip_id
+            AS SELECT trip_id, passenger_count, pickup_ntaname,
+            CASE WHEN passenger_count > 6 THEN
+            1 ELSE 0 END AS is_extra_passanger
+            FROM trips;
+        SQL;
+        $this->clickhouse->write($sql);
+        $dataCount = $this->clickhouse->select('SELECT count(*) FROM mv_trips;');
+        return response()->json([
+            'status' => 'done',
+            'data' => $dataCount->rows()
+        ]);
+    }
+
+    // show realtime updated data
+    public function showMvTable()
+    {
+        return $this->clickhouse->select('SELECT * FROM mv_trips;')->rows();
+    }
 }
