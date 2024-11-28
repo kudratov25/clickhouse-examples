@@ -10,19 +10,24 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'clickhouse'], function () {
+
     Route::get('/create-user', [UserController::class, 'createUsersTable']);
+    Route::get('/create-user/indexed', [UserController::class, 'createIndexedUsersTable']);
+    Route::get('/create-user/indexed/optimize', [UserController::class, 'optimizeIndexedUsersTable']);
 
     // here routes for info{$table} and destroy{$table}
     Route::get('/info/{table}', [ExController::class, 'info']);
     Route::get('/destroy/{table}', [ExController::class, 'destroyTable']);
 
     // route for exmples
-    Route::get('/trips/count', [TripsController::class, 'index']);
-    Route::get('/trips/create', [TripsController::class, 'createTrips']);
-    Route::get('/trips/import', [TripsController::class, 'import']);
-    Route::get('/trips/update', [TripsController::class, 'update']);
-    Route::get('/trips/get-update', [TripsController::class, 'getUpdateInfo']);
-    Route::get('/trips/update2', [TripsController::class, 'update2']);
-    Route::get('/trips/materialized-view', [TripsController::class, 'makeView']);
-    Route::get('/trips/materialized-view/data', [TripsController::class, 'showMvTable']);
+    Route::group(['prefix' => 'trips'], function () {
+        Route::get('/count', [TripsController::class, 'index']);
+        Route::get('/create', [TripsController::class, 'createTrips']);
+        Route::get('/import', [TripsController::class, 'import']);
+        Route::get('/update', [TripsController::class, 'update']);
+        Route::get('/get-update', [TripsController::class, 'getUpdateInfo']);
+        Route::get('/update2', [TripsController::class, 'update2']);
+        Route::get('/materialized-view', [TripsController::class, 'makeView']);
+        Route::get('/materialized-view/data', [TripsController::class, 'showMvTable']);
+    });
 });
