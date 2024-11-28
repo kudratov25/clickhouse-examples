@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClickhouseControllers\ExController;
 use App\Http\Controllers\ClickhouseControllers\UserController;
+use App\Http\Controllers\Examples\JoinsController;
 use App\Http\Controllers\Examples\TripsController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,5 +30,13 @@ Route::group(['prefix' => 'clickhouse'], function () {
         Route::get('/update2', [TripsController::class, 'update2']);
         Route::get('/materialized-view', [TripsController::class, 'makeView']);
         Route::get('/materialized-view/data', [TripsController::class, 'showMvTable']);
+    });
+
+    Route::group(['prefix' => 'joins'], function () {
+        Route::get('/new_trips/create', [JoinsController::class, 'createTripsTable']);
+        Route::get('/new_cities/create', [JoinsController::class, 'createCitiesTable']);
+        Route::get('/new_cities/seed', [JoinsController::class, 'seedCitiesTable']);
+        Route::get('/new_trips/seed', [JoinsController::class, 'seedNewTripsTable']);
+        Route::get('/new_trips/innerjoin', [JoinsController::class, 'innerjoin']);
     });
 });
