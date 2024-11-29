@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClickhouseControllers\ExController;
 use App\Http\Controllers\ClickhouseControllers\UserController;
 use App\Http\Controllers\Examples\JoinsController;
+use App\Http\Controllers\Examples\JsonController;
 use App\Http\Controllers\Examples\TripsController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,11 +33,21 @@ Route::group(['prefix' => 'clickhouse'], function () {
         Route::get('/materialized-view/data', [TripsController::class, 'showMvTable']);
     });
 
+    // joiins
     Route::group(['prefix' => 'joins'], function () {
         Route::get('/new_trips/create', [JoinsController::class, 'createTripsTable']);
         Route::get('/new_cities/create', [JoinsController::class, 'createCitiesTable']);
         Route::get('/new_cities/seed', [JoinsController::class, 'seedCitiesTable']);
         Route::get('/new_trips/seed', [JoinsController::class, 'seedNewTripsTable']);
         Route::get('/new_trips/innerjoin', [JoinsController::class, 'innerjoin']);
+    });
+
+    // routes for json data type working
+    Route::group(['prefix' => 'json'], function () {
+        // create table
+        Route::get('/create/people', [JsonController::class, 'createPeopleTable']);
+        // insert data to people table
+        Route::get('/insert/people', [JsonController::class, 'insertDataToPeople']);
+        Route::get('/query/{text}', [JsonController::class, 'queryJson']);
     });
 });
